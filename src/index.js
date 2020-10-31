@@ -4,10 +4,18 @@ import styled from 'styled-components'
 export const Accordion = styled.div`
   --transition-setting: 0.25s ease-out;
   overflow-y: hidden;
-  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 50%);
+  box-shadow: 0 0 0.25rem rgba(0, 0, 0, 50%);
   margin: 1rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
+  transition: box-shadow 0.25s;
+
+  &:hover {
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 50%);
+  }
+  &:focus-within {
+    box-shadow: 0 0 0.75rem rgba(0, 0, 0, 50%);
+  }
 `
 const HiddenInput = styled.input`
   position: absolute;
@@ -19,9 +27,10 @@ const StyledLabel = styled.label`
   display: flex;
   justify-content: space-between;
   padding: 0.25rem;
+  cursor: pointer;
 
   &::after {
-    content: '^';
+    content: ${(props) => (props.showCarat ? '^' : '')};
     transform: rotate(90deg);
     margin-right: 1rem;
     transition: transform var(--transition-setting);
@@ -79,11 +88,13 @@ export function AccordionContent(props) {
 }
 
 export function AccordionHeader(props) {
-  const { id, children } = props
+  const { id, children, showCarat = false } = props
   return (
     <React.Fragment>
       <HiddenInput type='checkbox' id={id} />
-      <StyledLabel htmlFor={id}>{children}</StyledLabel>
+      <StyledLabel htmlFor={id} showCarat={showCarat}>
+        {children}
+      </StyledLabel>
     </React.Fragment>
   )
 }
